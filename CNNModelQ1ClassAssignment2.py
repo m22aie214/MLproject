@@ -15,12 +15,13 @@ X_test = X_test / 16.0
 # MLP model architecture
 mlp_model = models.Sequential([
     layers.Dense(128, activation='relu', input_shape=(64,)),
+    layers.Dense(64, activation='relu'),  # Added hidden layer
     layers.Dropout(0.2),
     layers.Dense(10, activation='softmax')
 ])
 
 
-mlp_model.compile(optimizer='adam',
+mlp_model.compile(optimizer='adagrad',  # Changed optimizer to Adagrad
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
@@ -33,7 +34,8 @@ X_test_cnn = X_test.reshape(-1, 8, 8, 1)
 
 cnn_model = models.Sequential([
     layers.Conv2D(32, (3, 3), activation='relu', input_shape=(8, 8, 1)),
-    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu', input_shape=(8, 8, 1)),#Added convolutional layer Increased filters
+    layers.MaxPooling2D((3, 3)),  # Changed pooling size
     layers.Flatten(),
     layers.Dense(128, activation='relu'),
     layers.Dense(10, activation='softmax')
